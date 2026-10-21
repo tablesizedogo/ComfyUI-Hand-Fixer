@@ -1,0 +1,16 @@
+# Only needed for publishing to the Comfy Registry (https://registry.comfy.org); not required for manual install.
+
+[project]
+name = "comfyui-hand-fixer"
+description = "Find malformed hands in generated images (HADM-L artifact detector + ADetailer hand boxes), output a mask of bad hands, and pick the best of N inpainted fixes."
+version = "0.1.0"
+license = { file = "../../LICENSE" }
+dependencies = ["ultralytics>=8.1", "fvcore", "iopath", "omegaconf>=2.1", "hydra-core>=1.1", "pycocotools", "onnxruntime", "open_clip_torch"]
+
+[project.urls]
+Repository = "https://github.com/tablesizedogo/ComfyUI-Hand-Fixer"
+
+[tool.comfy]
+PublisherId = "tablesizedogo"
+DisplayName = "Hand Fixer"
+Icon = ""

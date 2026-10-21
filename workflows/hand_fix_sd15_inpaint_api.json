@@ -1,0 +1,229 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "SD1.5 inpainting checkpoint"
+    },
+    "inputs": {
+      "ckpt_name": "DreamShaper_8_INPAINTING.inpainting.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Image to fix"
+    },
+    "inputs": {
+      "image": "example.png"
+    }
+  },
+  "3": {
+    "class_type": "HandFixerLoadScorer",
+    "_meta": {
+      "title": "Load Hand Defect Scorer"
+    },
+    "inputs": {
+      "backend": "hadm",
+      "device": "auto",
+      "hand_detector": "hand_yolov8s.pt",
+      "allow_download": false
+    }
+  },
+  "4": {
+    "class_type": "HandFixerDefectScorer",
+    "_meta": {
+      "title": "Hand Defect Scorer"
+    },
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ],
+      "hand_scorer": [
+        "3",
+        0
+      ],
+      "threshold": 0.2,
+      "det_conf": 0.3,
+      "mask_grow": 0.15
+    }
+  },
+  "5": {
+    "class_type": "GrowMask",
+    "_meta": {
+      "title": "Grow mask"
+    },
+    "inputs": {
+      "mask": [
+        "4",
+        0
+      ],
+      "expand": 8,
+      "tapered_corners": true
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positive"
+    },
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "detailed hand, natural hand anatomy, five fingers, well-drawn fingers, high quality"
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative"
+    },
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "nsfw, nude, deformed hand, extra fingers, missing fingers, fused fingers, mutated hand, bad anatomy, blurry, lowres"
+    }
+  },
+  "8": {
+    "class_type": "VAEEncodeForInpaint",
+    "inputs": {
+      "pixels": [
+        "2",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "mask": [
+        "5",
+        0
+      ],
+      "grow_mask_by": 6
+    }
+  },
+  "9": {
+    "class_type": "RepeatLatentBatch",
+    "_meta": {
+      "title": "N candidates"
+    },
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "amount": 4
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "9",
+        0
+      ],
+      "seed": 1234,
+      "steps": 25,
+      "cfg": 6.0,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1.0
+    }
+  },
+  "11": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "10",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "12": {
+    "class_type": "HandFixerBestOfN",
+    "_meta": {
+      "title": "Hand Fix: Best-of-N Selector"
+    },
+    "inputs": {
+      "original": [
+        "2",
+        0
+      ],
+      "candidates": [
+        "11",
+        0
+      ],
+      "hand_scorer": [
+        "3",
+        0
+      ],
+      "candidates_per_image": 0,
+      "include_original": true,
+      "composite_with_original": true,
+      "det_conf": 0.3,
+      "mask": [
+        "5",
+        0
+      ]
+    }
+  },
+  "13": {
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save best"
+    },
+    "inputs": {
+      "images": [
+        "12",
+        0
+      ],
+      "filename_prefix": "hand_fixer/best"
+    }
+  },
+  "14": {
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save scorer preview"
+    },
+    "inputs": {
+      "images": [
+        "4",
+        1
+      ],
+      "filename_prefix": "hand_fixer/preview"
+    }
+  },
+  "15": {
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save all candidates"
+    },
+    "inputs": {
+      "images": [
+        "11",
+        0
+      ],
+      "filename_prefix": "hand_fixer/candidates"
+    }
+  }
+}

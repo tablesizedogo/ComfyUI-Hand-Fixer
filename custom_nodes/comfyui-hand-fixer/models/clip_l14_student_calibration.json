@@ -1,0 +1,45 @@
+{
+ "score": "clip_l14_logreg",
+ "model_file": "models/hand_ok_clip_l14_logreg.onnx",
+ "method": "platt",
+ "platt": {
+  "a": 0.26756905385067853,
+  "b": 2.1649398896552805,
+  "formula": "p_ok = sigmoid(a*logit(student_p_ok)+b)"
+ },
+ "isotonic_reference_only": {
+  "x": [
+   0.04161209240555763,
+   0.04453651234507561,
+   0.15344874560832977,
+   0.15713690221309662,
+   0.6329020261764526,
+   0.6344642639160156,
+   0.8172558546066284,
+   0.8187864422798157,
+   0.9688886404037476,
+   0.9700981974601746
+  ],
+  "y": [
+   0.0,
+   0.746742098909627,
+   0.746742098909627,
+   0.8844571029813278,
+   0.8844571029813278,
+   0.9505916045798456,
+   0.9505916045798456,
+   0.9670925215433789,
+   0.9670925215433789,
+   1.0
+  ]
+ },
+ "n_gold_hands": 182,
+ "n_bad": 17,
+ "hand_thr": 0.95,
+ "teacher": "hadm_gemma_det",
+ "gold_dirs": [
+  "gold_check",
+  "gold_check_v2"
+ ],
+ "note": "fitted on the user gold check (gold_check,gold_check_v2; 17 BAD); treat as approximate"
+}
