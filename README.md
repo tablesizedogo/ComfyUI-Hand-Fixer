@@ -10,7 +10,7 @@ same scorer (P(bad) 0.16). Produced by the example workflow in headless ComfyUI 
 > **Honest accuracy note.** On our independent human-labelled test round (75 hands from Civitai images, 8 broken),
 > the HADM-L backend ranks broken hands with **AUC 0.76 [95% CI 0.51–0.96]**; pooled over two rounds (182 hands, 17 broken)
 > it is **0.72 [0.54–0.87]**. That is a useful *triage* signal, not a reliable QC gate: at a 10% false-alarm rate it caught
-> 28% of broken hands on that round. The light CLIP-L backend is clearly weaker (0.59 / 0.61). Details and the full study:
+> 28% of broken hands on that round. The light CLIP-L backend is clearly weaker (0.58 / 0.60). Details and the full study:
 > [ai-hand-defect-detector](https://github.com/tablesizedogo/ai-hand-defect-detector).
 
 ## Nodes (category `image/hand fixer`)
@@ -91,7 +91,7 @@ on their outputs.
 
 ## End-to-end test (what was actually run)
 
-| | |
+| Item | Result |
 |---|---|
 | setup | headless ComfyUI (commit `faa7e49`), torch 2.11 + CUDA 12.8, a private Kaggle T4 kernel ([`scripts/kaggle_e2e/e2e.py`](scripts/kaggle_e2e/e2e.py)) |
 | images | 5 SFW Civitai images (1024 px long side), each containing a hand that a human had labelled BROKEN |
