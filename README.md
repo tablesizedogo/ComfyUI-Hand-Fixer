@@ -7,9 +7,10 @@ Find malformed hands in generated images, mask them for inpainting, and keep the
 *Left: the scorer flags one of the chef's hands (P(bad) 0.29, red box). Right: the best of 4 SD1.5 inpaints according to the
 same scorer (P(bad) 0.16). Produced by the example workflow in headless ComfyUI on a Kaggle T4.*
 
-> **Honest accuracy note.** On our independent human-labelled test round (75 hands from Civitai images, 8 broken),
-> the HADM-L backend ranks broken hands with **AUC 0.76 [95% CI 0.51–0.96]**; pooled over two rounds (182 hands, 17 broken)
-> it is **0.72 [0.54–0.87]**. That is a useful *triage* signal, not a reliable QC gate: at a 10% false-alarm rate it caught
+> **Honest accuracy note.** On 182 human-labelled hands from Civitai images (17 of them broken), the HADM-L backend
+> ranks broken hands with **AUC 0.72 [95% CI 0.54–0.87]** and **AP 0.33**; a random guess would get an AP of about 0.10.
+> On the held-out second round alone (75 hands, 8 broken) it got AUC 0.76 [0.51–0.96].
+> That is a useful *triage* signal, not a reliable QC gate: at a 10% false-alarm rate it caught
 > 28% of broken hands on that round. The light CLIP-L backend is clearly weaker (0.58 / 0.60). Details and the full study:
 > [ai-hand-defect-detector](https://github.com/tablesizedogo/ai-hand-defect-detector).
 
